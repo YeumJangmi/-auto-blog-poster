@@ -40,20 +40,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ date, topic })
             });
             
-            const data = await response.json();
-            
-            if (response.ok) {
-                // Success
-                currentRawMarkdown = data.content;
-                markdownResult.innerHTML = marked.parse(data.content);
-                resultSection.classList.remove('hidden');
+            // Check if response is JSON
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await response.json();
+                if (response.ok) {
+                    // Success
+                    currentRawMarkdown = data.content;
+                    markdownResult.innerHTML = marked.parse(data.content);
+                    resultSection.classList.remove('hidden');
+                } else {
+                    // Error
+                    alert(`Error: ${data.error}`);
+                }
             } else {
-                // Error
-                alert(`Error: ${data.error}`);
+                // Not JSON (e.g. Vercel 500/504 HTML error page)
+                const text = await response.text();
+                console.error("Non-JSON Error:", text);
+                alert(`서버 에러가 발생했습니다. (상태 코드: ${response.status})\n응답 내용: ${text.substring(0, 100)}...`);
             }
         } catch (error) {
             console.error('Error generating post:', error);
-            alert('An error occurred while communicating with the server.');
+            alert(`네트워크 통신 오류가 발생했습니다: ${error.message}`);
         } finally {
             // UI State: Reset
             btnText.textContent = 'Generate Post';
