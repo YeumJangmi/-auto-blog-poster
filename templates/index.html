@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Blog Poster</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Blog Post Generator</h1>
+            <p class="subtitle">AI-powered blog content creation based on latest news.</p>
+        </header>
+
+        <main>
+            <section class="card form-section">
+                <form id="generate-form">
+                    <div class="form-group">
+                        <label for="date-input">Target Date</label>
+                        <input type="date" id="date-input" name="date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Topic</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="topic" value="Education" checked>
+                                <span class="radio-custom"></span>
+                                Education (교육)
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="topic" value="AI">
+                                <span class="radio-custom"></span>
+                                AI (인공지능)
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn-primary">
+                        <span class="btn-text">Generate Post</span>
+                        <div class="spinner hidden" id="spinner"></div>
+                    </button>
+                </form>
+            </section>
+
+            <section id="result-section" class="card result-section hidden">
+                <div class="result-header">
+                    <h2>Generated Content</h2>
+                    <button id="copy-btn" class="btn-secondary">Copy to Clipboard</button>
+                </div>
+                <div id="markdown-result" class="markdown-body"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
