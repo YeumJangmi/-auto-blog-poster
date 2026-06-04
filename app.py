@@ -60,23 +60,8 @@ def generate_post():
     if blog_post_content.startswith("에러"):
         return jsonify({'error': blog_post_content}), 500
 
-    # (선택) 기존처럼 파일로도 저장 (Vercel에서는 /tmp 경로만 쓰기 가능)
-    # VERCEL 환경변수가 있으면 /tmp/posts 에 저장, 없으면 로컬 posts 에 저장
-    if os.environ.get("VERCEL"):
-        OUTPUT_DIR = "/tmp/posts"
-    else:
-        OUTPUT_DIR = "posts"
-        
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR)
-        
-    filename = f"{OUTPUT_DIR}/{target_date_str.replace('-', '')}_{topic}_post.md"
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(blog_post_content)
-
     return jsonify({
         'content': blog_post_content,
-        'filename': filename,
         'message': '성공적으로 블로그 글이 생성되었습니다.'
     })
 
